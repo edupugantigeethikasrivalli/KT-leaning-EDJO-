@@ -1,0 +1,130 @@
+Git and Git hub
+
+1. Setup & repository
+git --version
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+
+git init                           # Initialize repository
+git clone <repo-url>               # Clone repository
+git status                         # Check changes
+
+
+2. Add, commit & history
+git add <file>                     # Stage a file
+git add .                          # Stage changes
+git diff                           # Unstaged changes
+git diff --staged                  # Staged changes
+git commit -m "message"            # Save snapshot locally
+git log --oneline                  # View commit history
+git show HEAD                      # Inspect latest commit
+
+
+Internal: add → updates staging index; commit → creates a commit locally; push → sends commits to the remote.
+3. Branches
+git branch                         # List branches
+git branch <branch-name>           # Create branch
+git switch <branch-name>           # Switch branch
+git switch -c feature/login        # Create + switch
+git checkout <branch-name>         # Older switch command
+git checkout -b feature/login      # Older create + switch
+git branch -d <branch-name>        # Delete merged branch
+git branch -a                      # List local and remote-tracking branches
+
+
+4. Merge
+git switch main
+git merge feature/login            # Merge feature into main
+git merge --abort                  # Abort an in-progress merge
+
+
+- Fast-forward: Advances the branch pointer; no merge commit needed.
+- Three-way merge: Combines diverged histories; normally creates a merge commit.
+- Conflict: Resolve the file, then git add <file> and git merge --continue.
+5. Remote & GitHub
+git remote -v                      # View remote URLs
+git remote add origin <repo-url>   # Add remote
+git fetch origin                   # Download remote updates
+git pull origin main               # Fetch + integrate remote main
+git push origin main               # Push main
+git push -u origin feature/login   # Push branch + set upstream
+
+
+6. Pull request (PR)
+git switch main
+git pull origin main
+git switch -c feature/login
+
+# Make changes
+git add .
+git commit -m "Add login feature"
+git push -u origin feature/login
+
+
+Then on GitHub: Pull requests → New pull request → Base: main → Compare: feature/login → Create pull request.
+A PR requests review and merging; it does not merge automatically.
+7. Undo & recover
+git restore <file>                 # Discard unstaged file changes
+git restore --staged <file>        # Unstage without deleting changes
+git revert <commit-id>             # Reverse commit with a new commit
+git reset --soft HEAD~1             # Undo latest commit; keep changes staged
+git reset --mixed HEAD~1            # Undo commit; keep changes unstaged
+git stash                          # Temporarily save changes
+git stash pop                      # Restore and remove latest stash
+git reflog                         # Inspect recent local reference history
+
+
+
+8. Git internals
+Concept	Meaning
+.git/	Local Git metadata and object database
+HEAD	Current checkout reference
+Index	Staging area
+Blob	File content
+Tree	Directory structure
+Commit	Snapshot reference + metadata + parent(s)
+Branch	Movable reference to a commit
+origin/main	Local remote-tracking reference
+9. Daily workflow
+
+pull → branch → code → add → commit → push → PR → review → merge
+
+
+
+1. Check differences between branches
+git diff main..feature/login       # Compare branch changes
+git log main..feature/login --oneline  # Commits in feature only
+
+
+2. Rename a branch
+git branch -m new-branch-name      # Rename current branch
+
+
+3. Delete a remote branch
+git push origin --delete feature/login
+
+
+This deletes the remote branch, not your local branch.
+4. Cherry-pick a commit
+git cherry-pick <commit-id>
+
+
+Apply a specific commit to your current branch without merging the entire source branch history.
+5. Rebase
+git switch feature/login
+git rebase main
+
+
+Replay your feature branch's commits on top of main. Resolve conflicts if needed. Avoid rebasing commits that teammates already depend on unless your team agrees.
+6. Amend the latest commit
+git commit --amend -m "Updated commit message"
+
+
+Modify the latest commit. This creates a replacement commit, so be careful if the original was already pushed.
+7. See who changed each line
+git blame filename
+
+
+Shows line-by-line authorship and the associated commits. It identifies historical changes, not necessarily who is responsible for a bug.
+
+
