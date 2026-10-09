@@ -1,0 +1,75 @@
+Command	Statement
+pwd	Displays the current working directory.
+ls	Lists files and directories.
+ls -la	Lists all entries, including hidden files, with details.
+cd /tmp	Changes the current directory to /tmp.
+cd ..	Moves one directory level up.
+mkdir test	Creates a directory named test.
+touch app.log	Creates an empty file or updates its timestamp.
+cp a.txt b.txt	Copies a.txt to b.txt.
+mv a.txt b.txt	Moves or renames a file.
+rm a.txt	Deletes a file.
+cat app.log	Displays the contents of a file.
+less app.log	Opens a file in a scrollable viewer.
+head -n 10 app.log	Displays the first 10 lines of a file.
+tail -n 20 app.log	Displays the last 20 lines of a file.
+tail -f app.log	Continuously displays new lines appended to a log file.
+grep "ERROR" app.log	Searches a file for lines containing ERROR.
+find /tmp -name "*.log"	Finds files ending in .log under /tmp.
+whoami	Displays the current username.
+id	Displays user and group IDs.
+history	Displays previously entered shell commands.
+man ls	Opens the manual page for the ls command.
+
+Command	Statement
+chmod 755 script.sh	Gives the owner read, write and execute permissions; group and others get read and execute permissions.
+chmod 644 app.conf	Gives the owner read/write permissions and group/others read permission.
+chmod u+x script.sh	Adds execute permission for the file owner.
+chown user:group app.log	Changes the file's owner and group, subject to authorization.
+sudo command	Runs a command with elevated privileges when authorized.
+who	Displays logged-in user sessions.
+groups	Displays the current user's group memberships.
+passwd	Changes the current user's password, subject to system policy.
+3. Linux Process and Performance Commands
+Command	Statement
+ps -ef	Displays running processes in a full-format listing.
+ps aux	Displays detailed process information, including CPU and memory usage.
+top	Monitors processes, CPU usage and memory usage in real time.
+pgrep java	Finds process IDs matching the name java.
+kill PID	Sends the default termination signal to a process.
+kill -9 PID	Forcefully terminates a process using SIGKILL.
+free -h	Displays RAM and swap usage in human-readable units.
+df -h	Displays filesystem disk usage.
+df -i	Displays inode usage for filesystems.
+du -sh /var/log	Displays the total size of the /var/log directory.
+uptime	Displays system uptime and load averages.
+vmstat 1	Reports system statistics at one-second intervals.
+lscpu	Displays CPU architecture and processor details.
+4. Linux Services, Logs and Networking
+Command	Statement
+systemctl status nginx	Displays the status of the Nginx service.
+sudo systemctl restart nginx	Restarts the Nginx service.
+systemctl --failed	Lists failed systemd units.
+journalctl -u nginx	Displays systemd journal entries for Nginx.
+journalctl -u nginx -f	Follows new journal entries for Nginx.
+dmesg	Displays kernel ring-buffer messages.
+ip addr	Displays network interfaces and IP addresses.
+ip route	Displays the IP routing table.
+ss -tulpn	Displays listening sockets and, where permitted, associated processes.
+ping example.com	Tests ICMP reachability to a host.
+curl -I https://example.com	Sends an HTTP request and displays response headers.
+curl -v http://localhost:8080	Displays detailed HTTP connection information for a local endpoint.
+dig example.com	Queries DNS records when the dig utility is installed.
+ssh user@server	Connects to a remote server over SSH.
+5. Dynatrace Commands and Operations
+Dynatrace is primarily an observability platform with a web interface, APIs, DQL, and configuration workflows. It does not have one universal Linux-style command-line interface. The commands below are used to check the Linux host, OneAgent, and API access associated with Dynatrace.
+A. OneAgent and host checks
+Command	Statement
+systemctl status oneagent	Checks the OneAgent service status on systems where it is registered under this service name.
+sudo systemctl restart oneagent	Restarts the OneAgent service when supported and authorized; use your organization's change procedures.
+ps -ef \| grep -i oneagent	Searches the process listing for processes containing oneagent.
+sudo journalctl -u oneagent -n 100	Displays the latest 100 journal entries for the OneAgent service, if available in the journal.
+df -h	Checks filesystem capacity on the monitored host.
+free -h	Checks host RAM and swap usage.
+top	Checks CPU and memory activity on the monitored host.
+curl -I https://your-environment-url	Tests an HTTP connection to the specified Dynatrace environment URL.
