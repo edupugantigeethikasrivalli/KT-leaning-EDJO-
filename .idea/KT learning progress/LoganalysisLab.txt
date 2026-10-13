@@ -1,0 +1,206 @@
+//automate moving folders from Folder A to Folder B at a specific time using Git Bash
+
+
+1. Create the folder structure
+mkdir -p ~/folder-transfer/A
+mkdir -p ~/folder-transfer/B
+
+mkdir -p ~/folder-transfer/A/folder1
+mkdir -p ~/folder-transfer/A/folder2
+
+echo "Data from folder1" > ~/folder-transfer/A/folder1/data.txt
+echo "Data from folder2" > ~/folder-transfer/A/folder2/data.
+
+2. Create the Bash script
+
+cd ~/folder-transfer
+nano move_folders.sh
+
+
+
+#!/usr/bin/env bash
+
+BASE="$HOME/folder-transfer"
+SOURCE="$BASE/A"
+DEST="$BASE/B"
+LOG="$BASE/transfer.log"
+
+echo "Folder transfer automation started."
+
+while true; do
+    CURRENT_TIME=$(date +%H:%M)
+    TODAY=$(date +%F)
+
+    if [[ -f "$BASE/.last_transfer_date" ]]; then
+        LAST_RUN=$(cat "$BASE/.last_transfer_date")
+    else
+        LAST_RUN=""
+    fi
+
+    if [[ "$CURRENT_TIME" == "18:00" && "$LAST_RUN" != "$TODAY" ]]; then
+
+        if [[ -d "$SOURCE" && -d "$DEST" ]]; then
+            shopt -s nullglob dotglob
+            folders=("$SOURCE"/*/)
+
+            if (( ${#folders[@]} > 0 )); then
+                if mv -- "${folders[@]}" "$DEST"/; then
+                    echo "[$(date)] Folders moved successfully." >> "$LOG"
+                    printf '%s\n' "$TODAY" > "$BASE/.last_transfer_date"
+                else
+                    echo "[$(date)] ERROR: Folder transfer failed." >> "$LOG"
+                fi
+            else
+                echo "[$(date)] No folders to move." >> "$LOG"
+                printf '%s\n' "$TODAY" > "$BASE/.last_transfer_date"
+            fi
+
+            shopt -u nullglob dotglob
+        else
+            echo "[$(date)] ERROR: Source or destination missing." >> "$LOG"
+        fi
+    fi
+
+    sleep 10
+done
+
+
+
+chmod +x ~/folder-transfer/move_folders.sh
+
+~/folder-transfer/move_folders.sh
+
+
+
+////automate CPU and memory monitoring on a specific server using a Bash script. The script will check usage at regular intervals and generate an alert when either metric crosses the configured threshold.
+
+#!/usr/bin/env bash
+
+CPU_THRESHOLD=80
+MEMORY_THRESHOLD=85
+CHECK_INTERVAL=60
+LOG_FILE="$HOME/server_alerts.log"
+
+get_cpu_usage() {
+    read -r _ user nice system idle iowait irq softirq steal _ < /proc/stat
+    idle1=$((idle + iowait))
+    total1=$((user + nice + system + idle + iowait + irq + softirq + steal))
+
+    sleep 1
+
+    read -r _ user nice system idle iowait irq softirq steal _ < /proc/stat
+    idle2=$((idle + iowait))
+    total2=$((user + nice + system + idle + iowait + irq + softirq + steal))
+
+    awk -v t1="$total1" -v t2="$total2" \
+        -v i1="$idle1" -v i2="$idle2" \
+        'BEGIN {
+            if (t2 == t1) print 0;
+            else printf "%.1f", 100 * (1 - (i2-i1)/(t2-t1))
+        }'
+}
+
+get_memory_usage() {
+    awk '
+        /MemTotal:/ { total=$2 }
+        /MemAvailable:/ { available=$2 }
+        END {
+            if (total > 0)
+                printf "%.1f", 100 * (total-available)/total
+        }
+    ' /proc/meminfo
+}
+
+while true; do
+    CPU_USAGE=$(get_cpu_usage)
+    MEMORY_USAGE=$(get_memory_usage)
+    TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+
+    echo "[$TIMESTAMP] CPU: ${CPU_USAGE}%, Memory: ${MEMORY_USAGE}%"
+
+    if awk -v usage="$CPU_USAGE" -v limit="$CPU_THRESHOLD" \
+        'BEGIN { exit !(usage > limit) }'; then
+        echo "[$TIMESTAMP] ALERT: CPU usage is ${CPU_USAGE}%!" \
+            | tee -a "$LOG_FILE"
+    fi
+
+    if awk -v usage="$MEMORY_USAGE" -v limit="$MEMORY_THRESHOLD" \
+        'BEGIN { exit !(usage > limit) }'; then
+        echo "[$TIMESTAMP] ALERT: Memory usage is ${MEMORY_USAGE}%!" \
+            | tee -a "$LOG_FILE"
+    fi
+
+    sleep "$CHECK_INTERVAL"
+done
+
+
+chmod +x server_monitor.sh
+./server_monitor.sh
+
+
+
+////searching  a log file for the word error, counts how many times it appears, saves matching lines, and sends an alert when errors are detected
+
+1. Create the sample log file
+Application started
+INFO: User logged in
+ERROR: Database connection failed
+INFO: Retrying connection
+Error: Request timed out
+ERROR: Database connection failed
+Application stopped
+
+Script 1 — Find errors and save matching lines
+Create error_monitor.sh:
+
+#!/usr/bin/env bash
+
+FILE="application.log"
+KEYWORD="error"
+ALERT_FILE="error_alerts.log"
+
+if [[ ! -f "$FILE" ]]; then
+    echo "ERROR: File '$FILE' not found."
+    exit 1
+fi
+
+echo "Searching for '$KEYWORD' in $FILE..."
+
+if grep -in "$KEYWORD" "$FILE" > /tmp/error_matches.txt; then
+    echo "Errors found!"
+    cat /tmp/error_matches.txt
+    cat /tmp/error_matches.txt >> "$ALERT_FILE"
+    echo "Matching lines saved to $ALERT_FILE"
+else
+    echo "No errors found."
+fi
+
+Script 2 — Count the occurrences of error
+
+Create count_errors.sh
+
+
+
+#!/usr/bin/env bash
+
+FILE="application.log"
+KEYWORD="error"
+COUNT_FILE="error_count.log"
+
+if [[ ! -f "$FILE" ]]; then
+    echo "ERROR: File '$FILE' not found."
+    exit 1
+fi
+
+COUNT=$(grep -oiw "$KEYWORD" "$FILE" | wc -l)
+TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+
+echo "[$TIMESTAMP] The word '$KEYWORD' appeared $COUNT times in $FILE"
+
+echo "[$TIMESTAMP] Error count: $COUNT" >> "$COUNT_FILE"
+
+
+chmod +x error_monitor.sh count_errors.sh
+
+./error_monitor.sh
+./count_errors.sh
