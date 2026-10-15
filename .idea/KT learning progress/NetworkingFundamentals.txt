@@ -1,0 +1,173 @@
+1. DNS (Domain Name System)
+- DNS converts domain names into IP addresses.
+- Example: google.com → IP address.
+- DNS works like a phonebook for the internet.
+Common DNS records:
+- A – IPv4 address
+- AAAA – IPv6 address
+- CNAME – Alias for another hostname
+- MX – Mail server
+- TXT – Text information
+Commands:
+nslookup google.com
+nslookup -type=MX google.com
+
+
+2. IP Address
+- An IP address identifies a network interface for communication.
+- IPv4 example: 192.168.1.10
+- IPv6 example: 2001:db8::10
+Types:
+- Public IP – Routable on the public internet.
+- Private IP – Used within private networks.
+- Static IP – Intended to remain fixed.
+- Dynamic IP – Assigned dynamically and may change.
+Commands:
+ipconfig
+ipconfig /all
+
+
+Linux:
+ip addr
+ip route
+
+
+3. Ports
+- A port identifies a service endpoint on a host using TCP or UDP.
+- IP identifies the destination; the port identifies the application endpoint.
+Port	Common use
+22	SSH
+53	DNS
+80	HTTP
+443	HTTPS
+3389	RDP
+3306	MySQL
+5432	PostgreSQL
+8080	Alternative HTTP port
+Command:
+Test-NetConnection google.com -Port 443
+
+
+4. HTTP and HTTPS
+- HTTP is an application-layer protocol for client-server communication.
+- HTTPS is HTTP secured using TLS.
+- HTTP commonly uses port 80.
+- HTTPS commonly uses port 443.
+HTTP methods:
+- GET – Retrieve data
+- POST – Submit data
+- PUT – Replace a resource
+- PATCH – Partially update a resource
+- DELETE – Request resource deletion
+Common status codes:
+- 200 – OK
+- 301/302 – Redirect
+- 400 – Bad Request
+- 401 – Authentication required or invalid
+- 403 – Access forbidden
+- 404 – Not Found
+- 500 – Internal Server Error
+- 502 – Bad Gateway
+- 503 – Service Unavailable
+- 504 – Gateway Timeout
+5. TLS and SSL
+- TLS (Transport Layer Security) encrypts data in transit and protects its integrity.
+- SSL is the older, obsolete predecessor of TLS.
+- HTTPS uses TLS to secure HTTP communication.
+TLS handshake:
+1. Client sends Client Hello.
+2. Server selects parameters and provides its certificate.
+3. Client validates the certificate and establishes shared session keys.
+4. Encrypted communication begins.
+Common TLS errors:
+- Expired certificate
+- Hostname mismatch
+- Untrusted certificate
+- Incorrect system time
+- Incompatible TLS configuration
+Commands:
+curl -v https://example.com
+
+
+openssl s_client -connect example.com:443 -servername example.com
+
+
+6. Proxy
+- A proxy acts as an intermediary between a client and a server.
+Types:
+- Forward proxy – Acts on behalf of clients, often controlling outbound access.
+- Reverse proxy – Receives requests on behalf of backend servers.
+Uses:
+- Access control
+- Traffic routing
+- Caching
+- TLS termination
+- Corporate internet access policies
+Commands:
+env | grep -i proxy
+
+
+PowerShell:
+Get-ChildItem Env: | Where-Object Name -Match 'proxy'
+
+
+7. Load Balancer
+- A load balancer distributes incoming traffic across multiple backend servers.
+- It improves availability and helps distribute workload.
+- Health checks can help prevent traffic from being sent to unhealthy backends.
+Types:
+Layer 4 load balancer
+- Works with TCP/UDP transport information.
+- Uses IP addresses and ports.
+- Example: Azure Load Balancer.
+Layer 7 load balancer
+- Understands application protocols such as HTTP.
+- Can route traffic using hostnames and URL paths.
+- Example: Azure Application Gateway.
+Difference: Layer 4 routes using transport-level information; Layer 7 can make routing decisions based on application-level information.
+8. curl
+- curl is a command-line tool used to send requests and test URLs, APIs, and HTTP/HTTPS connectivity.
+Commands:
+Check a website:
+curl https://example.com
+
+
+Display response headers:
+curl -I https://example.com
+
+
+Verbose troubleshooting:
+curl -v https://example.com
+
+
+Display HTTP status code:
+curl -s -o /dev/null -w "%{http_code}\n" https://example.com
+
+
+Measure total response time:
+curl -s -o /dev/null -w "%{time_total}\n" https://example.com
+
+
+Send a POST request:
+curl -X POST https://example.com/api \
+  -H "Content-Type: application/json" \
+  -d '{"name":"test"}'
+
+
+9. nslookup
+- nslookup is a command-line tool used to query DNS servers and troubleshoot name resolution.
+Commands:
+Resolve a hostname:
+nslookup google.com
+
+
+Query a specific DNS server:
+nslookup google.com 8.8.8.8
+
+
+Find MX records:
+nslookup -type=MX google.com
+
+
+Find TXT records:
+nslookup -type=TXT google.com

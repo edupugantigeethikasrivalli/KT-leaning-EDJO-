@@ -1,0 +1,107 @@
+1. Azure Subscription
+- An Azure subscription is a logical boundary for organizing Azure resources, managing resource usage, billing, and access.
+- A subscription contains resource groups and resources.
+- Organizations may use separate subscriptions for development, testing, and production.
+- Budgets, policies, and access controls can be managed at the subscription scope.
+Example: Development-Subscription, Production-Subscription.
+2. Resource Groups
+- A resource group is a logical container for related Azure resources.
+- It helps organize, manage, monitor, and control access to resources.
+- A resource group belongs to one subscription.
+- Resources in a resource group can be located in different Azure regions.
+- Deleting a resource group deletes the resources it contains, so deletion must be handled carefully.
+Example: rg-shop-prod can contain a virtual machine, storage account, and related resources.
+Subscription vs Resource Group:
+- Subscription – Organizes resource usage, billing, and access scope.
+- Resource group – Organizes related resources within a subscription.
+3. Identity and Access Management
+- Microsoft Entra ID is Azure's cloud identity and access management service.
+- It manages users, groups, application identities, and workload identities.
+- Authentication verifies who you are.
+- Authorization determines what you are allowed to do.
+- Azure RBAC (Role-Based Access Control) assigns permissions to identities at specific scopes.
+Common Azure RBAC roles:
+- Owner – Manage resources and assign access.
+- Contributor – Manage resources but cannot grant Azure RBAC access.
+- Reader – View resources without modifying them.
+- User Access Administrator – Manage access assignments within the authorized scope.
+Managed Identity:
+- Provides an identity for an Azure workload without requiring you to manage its underlying credentials.
+- System-assigned identity – Tied to a particular Azure resource's lifecycle.
+- User-assigned identity – Separate identity that can be associated with multiple supported resources.
+Example: A virtual machine uses a managed identity to access Azure Key Vault without storing a password in application code.
+4. Azure Compute
+Azure Compute provides the resources and services used to run applications.
+Azure Virtual Machines (VMs):
+- Provide virtual servers with configurable CPU, memory, operating systems, and disks.
+- The customer manages the operating system and installed applications.
+- Used when greater control over the server is required.
+Azure App Service:
+- A managed platform for hosting web applications and APIs.
+- Azure manages much of the underlying infrastructure.
+Azure Functions:
+- Runs event-driven code without requiring you to manage traditional servers.
+- Useful for automation and event-triggered processing.
+Virtual Machine Scale Sets (VMSS):
+- Manage groups of similar virtual machines.
+- Support scaling and distributing workloads across VM instances.
+Availability concepts:
+- Availability zones – Physically separate locations within supported regions.
+- Availability sets – Help distribute VMs across fault and update domains within a data center.
+- High availability – Designing systems to remain operational despite certain failures.
+5. Azure Storage
+Azure Storage provides services for storing application data, files, objects, and disks.
+Storage service	Purpose
+Blob Storage	Stores objects such as images, backups, logs, and documents
+Azure Files	Provides managed file shares
+Managed Disks	Provides persistent block storage for Azure VMs
+Queue Storage	Stores messages for asynchronous processing
+Table Storage	Stores NoSQL key-value data
+Storage redundancy:
+- LRS – Locally redundant storage.
+- ZRS – Zone-redundant storage.
+- GRS – Geo-redundant storage.
+- GZRS – Geo-zone-redundant storage.
+The appropriate option depends on availability, disaster recovery, regional support, and cost requirements.
+Example: An e-commerce application stores product images in Blob Storage and uses managed disks for VM operating systems.
+6. AKS — Azure Kubernetes Service
+- AKS is Microsoft's managed Kubernetes service for running containerized applications on Azure.
+- Docker or another supported container build tool packages applications into container images.
+- Kubernetes orchestrates containers across a cluster.
+- AKS provides a managed Kubernetes control plane and Azure integrations.
+Important AKS components:
+- Cluster: The Kubernetes environment.
+- Control plane: Coordinates cluster operations and maintains the desired state.
+- Worker nodes: Machines that run application workloads.
+- Pod: The smallest deployable Kubernetes unit; contains one or more containers.
+- Deployment: Manages replicated application workloads and updates.
+- Service: Provides a stable network endpoint for accessing selected pods.
+- Ingress: Supports HTTP/HTTPS routing into the cluster when an appropriate ingress controller is configured.
+- Azure Container Registry (ACR): Stores container images for deployment.
+Basic deployment flow:
+1. Develop the application.
+2. Build a container image.
+3. Push the image to ACR.
+4. Deploy the application to AKS using Kubernetes manifests.
+5. Expose the application through an appropriate Service or ingress setup.
+6. Monitor, troubleshoot, and scale the application.
+Scaling concepts:
+- HPA (Horizontal Pod Autoscaler) – Adjusts the number of pod replicas.
+- Cluster Autoscaler – Adjusts worker node capacity according to scheduling demand and configuration.
+Useful AKS commands:
+kubectl get nodes
+kubectl get pods
+kubectl get deployments
+kubectl get services
+kubectl describe pod <pod-name>
+kubectl logs <pod-name>
+
+
+Quick Revision
+Topic	Key point
+Subscription	Organizes resource usage, billing, and access scope
+Resource group	Logical container for related Azure resources
+Identity	Manages identities and access to resources
+Compute	Runs applications and workloads
+Storage	Stores files, objects, messages, and disks
+AKS	Runs and orchestrates containerized applications using Kubernetes
