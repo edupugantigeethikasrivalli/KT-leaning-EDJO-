@@ -1,0 +1,128 @@
+1. Introduction to Operations Automation
+Operations automation is the process of using scripts to perform repetitive operational tasks automatically, reducing manual effort and human errors.
+Applications
+- Log analysis — count errors and warnings in log files.
+- System monitoring — check CPU, memory, and disk usage.
+- File management — read, write, and organize files.
+- API automation — send requests and process API responses.
+- Task automation — generate reports and automate routine checks.
+2. Variables in Python
+A variable is a named reference used to store a value that can be used later in a program.
+Syntax:
+variable_name = value
+
+
+
+Example:
+server_name = "server-01"cpu_usage = 75memory_usage = 68.5is_server_running = Trueprint(server_name)print(cpu_usage)print(memory_usage)print(is_server_running)
+
+
+
+Output:
+server-01
+75
+68.5
+True
+
+
+Variable naming rules
+- Variable names can contain letters, digits, and underscores.
+- A variable name cannot start with a digit.
+- Variable names are case-sensitive.
+- Python keywords cannot be used as variable names.
+- Use descriptive names such as cpu_usage and error_count.
+3. Python Data Types
+Data types define the kind of value stored in a variable.
+Data type	Description	Example
+str	Text	"RUNNING"
+int	Whole numbers	100
+float	Decimal numbers	82.5
+bool	Boolean values	True, False
+Example:
+server_status = "RUNNING"error_count = 10cpu_usage = 82.5service_up = Trueprint(type(server_status))print(type(error_count))print(type(cpu_usage))print(type(service_up))
+
+
+
+The type() function returns the data type of a value.
+Importance in operations automation
+- str stores server names, statuses, and log messages.
+- int stores error counts and process IDs.
+- float stores measurements such as CPU utilization.
+- bool represents conditions such as whether a service is running.
+4. Operators in Python
+Operators perform calculations and comparisons.
+A. Arithmetic operators
+Operator	Purpose	Example	Result
++	Addition	10 + 5	15
+-	Subtraction	10 - 5	5
+*	Multiplication	10 * 5	50
+/	Division	10 / 5	2.0
+%	Remainder	10 % 3	1
+//	Floor division	10 // 3	3
+**	Exponentiation	2 ** 3	8
+Example:
+cpu_reading_1 = 70cpu_reading_2 = 90average_cpu = (cpu_reading_1 + cpu_reading_2) / 2print(average_cpu)
+
+
+
+Output:
+80.0
+
+
+B. Comparison operators
+Comparison operators compare two values and return True or False.
+Operator	Meaning	Example
+>	Greater than	90 > 80 → True
+<	Less than	60 < 80 → True
+>=	Greater than or equal to	80 >= 80 → True
+<=	Less than or equal to	70 <= 80 → True
+==	Equal to	200 == 200 → True
+!=	Not equal to	200 != 500 → True
+Important: = assigns a value to a variable, whereas == checks whether two values are equal.
+5. Conditional Statements — Introduction
+Conditional statements allow a program to make decisions based on conditions.
+Example:
+cpu_usage = 85.5threshold = 80if cpu_usage > threshold:    print("WARNING: High CPU usage detected!")else:    print("CPU usage is normal.")
+
+
+
+Output:
+WARNING: High CPU usage detected!
+
+
+Explanation:
+1. The CPU usage is stored in cpu_usage.
+2. The threshold is set to 80.
+3. Python compares the CPU usage with the threshold.
+4. If CPU usage exceeds the threshold, a warning is printed; otherwise, a normal-status message is printed.
+The if and else statements will be covered in more detail in the next lesson.
+6. Operations Automation Example
+The following script demonstrates how Python can be used to identify high CPU utilization.
+server_name = "server-01"cpu_usage = 85.5threshold = 80print("Server:", server_name)print("CPU Usage:", cpu_usage, "%")if cpu_usage > threshold:    print("WARNING: High CPU usage detected!")else:    print("CPU usage is normal.")
+
+
+
+Expected output:
+Server: server-01
+CPU Usage: 85.5 %
+WARNING: High CPU usage detected!
+
+
+This is a basic example using a sample CPU value. It does not measure the actual CPU usage of a machine.
+7. Key Takeaways
+- Variables store values for later use.
+- Data types define the kind of values stored.
+- The type() function identifies a value's data type.
+- Arithmetic operators perform calculations.
+- Comparison operators evaluate conditions.
+- Conditional statements enable decision-making.
+- Python can automate operational tasks such as monitoring and log analysis.
+Basic automation workflow:
+Input data
+CPU readings, logs, files or API responses
+
+Process data
+Variables, calculations and comparisons
+
+Take action
+Print status, generate reports or raise alerts
