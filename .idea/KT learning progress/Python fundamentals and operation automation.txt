@@ -1,6 +1,6 @@
 1. Introduction to Operations Automation
 Operations automation is the process of using scripts to perform repetitive operational tasks automatically, reducing manual effort and human errors.
-Applications
+Applications:
 - Log analysis — count errors and warnings in log files.
 - System monitoring — check CPU, memory, and disk usage.
 - File management — read, write, and organize files.
@@ -25,10 +25,10 @@ server-01
 True
 
 
-Variable naming rules
-- Variable names can contain letters, digits, and underscores.
-- A variable name cannot start with a digit.
-- Variable names are case-sensitive.
+Variable naming rules:
+- Names can contain letters, digits, and underscores.
+- A name cannot start with a digit.
+- Names are case-sensitive.
 - Python keywords cannot be used as variable names.
 - Use descriptive names such as cpu_usage and error_count.
 3. Python Data Types
@@ -44,7 +44,7 @@ server_status = "RUNNING"error_count = 10cpu_usage = 82.5service_up = Trueprint(
 
 
 The type() function returns the data type of a value.
-Importance in operations automation
+Importance in operations automation:
 - str stores server names, statuses, and log messages.
 - int stores error counts and process IDs.
 - float stores measurements such as CPU utilization.
@@ -65,12 +65,9 @@ cpu_reading_1 = 70cpu_reading_2 = 90average_cpu = (cpu_reading_1 + cpu_reading_2
 
 
 
-Output:
-80.0
-
-
+Output: 80.0
 B. Comparison operators
-Comparison operators compare two values and return True or False.
+Comparison operators compare values and return True or False.
 Operator	Meaning	Example
 >	Greater than	90 > 80 → True
 <	Less than	60 < 80 → True
@@ -78,8 +75,8 @@ Operator	Meaning	Example
 <=	Less than or equal to	70 <= 80 → True
 ==	Equal to	200 == 200 → True
 !=	Not equal to	200 != 500 → True
-Important: = assigns a value to a variable, whereas == checks whether two values are equal.
-5. Conditional Statements — Introduction
+Important: = assigns a value; == checks whether two values are equal.
+5. Conditional Statements
 Conditional statements allow a program to make decisions based on conditions.
 Example:
 cpu_usage = 85.5threshold = 80if cpu_usage > threshold:    print("WARNING: High CPU usage detected!")else:    print("CPU usage is normal.")
@@ -91,13 +88,12 @@ WARNING: High CPU usage detected!
 
 
 Explanation:
-1. The CPU usage is stored in cpu_usage.
-2. The threshold is set to 80.
-3. Python compares the CPU usage with the threshold.
-4. If CPU usage exceeds the threshold, a warning is printed; otherwise, a normal-status message is printed.
-The if and else statements will be covered in more detail in the next lesson.
+1. Store the CPU usage in cpu_usage.
+2. Set the threshold to 80.
+3. Compare CPU usage with the threshold.
+4. Print a warning if the usage exceeds the threshold; otherwise, print a normal-status message.
 6. Operations Automation Example
-The following script demonstrates how Python can be used to identify high CPU utilization.
+This script demonstrates a basic CPU threshold check using a sample value.
 server_name = "server-01"cpu_usage = 85.5threshold = 80print("Server:", server_name)print("CPU Usage:", cpu_usage, "%")if cpu_usage > threshold:    print("WARNING: High CPU usage detected!")else:    print("CPU usage is normal.")
 
 
@@ -108,21 +104,137 @@ CPU Usage: 85.5 %
 WARNING: High CPU usage detected!
 
 
-This is a basic example using a sample CPU value. It does not measure the actual CPU usage of a machine.
-7. Key Takeaways
-- Variables store values for later use.
-- Data types define the kind of values stored.
-- The type() function identifies a value's data type.
-- Arithmetic operators perform calculations.
-- Comparison operators evaluate conditions.
-- Conditional statements enable decision-making.
-- Python can automate operational tasks such as monitoring and log analysis.
-Basic automation workflow:
-Input data
-CPU readings, logs, files or API responses
+Note: This script uses sample data; it does not measure actual system CPU usage.
+7. File Handling in Python
+File handling allows Python to read, write, and process files. It is useful for analyzing application logs, configuration files, and operational reports.
+Common file modes
+Mode	Purpose
+"r"	Read a file
+"w"	Write to a file, replacing existing content
+"a"	Append content to a file
+"rb"	Read a file in binary mode
+Example: Reading a file
+Create a file named operations.log containing:
+INFO: Application started
+ERROR: Database connection failed
+INFO: Request completed
+ERROR: API request failed
 
-Process data
-Variables, calculations and comparisons
 
-Take action
+Python code:
+with open("operations.log", "r") as file:    content = file.read()print(content)
+
+
+
+Explanation:
+- open() opens the file.
+- "r" specifies read mode.
+- read() reads the file content.
+- with automatically closes the file after the block finishes.
+Count errors in a log file
+error_count = 0with open("operations.log", "r") as file:    for line in file:        if "ERROR" in line:            error_count += 1print("Total errors:", error_count)
+
+
+
+Output:
+Total errors: 2
+
+
+Operations use case: Automatically identify how many errors occurred in an application log.
+8. Parsing Data in Python
+Data parsing means reading raw data and extracting useful information from it.
+Operational scripts commonly parse logs, CSV files, JSON responses, and configuration files.
+Example: Parsing log lines
+log_line = "ERROR: Database connection failed"parts = log_line.split(":", 1)level = parts[0]message = parts[1].strip()print("Level:", level)print("Message:", message)
+
+
+
+Output:
+Level: ERROR
+Message: Database connection failed
+
+
+Here:
+- split(":", 1) separates the log level from the message at the first colon.
+- strip() removes extra whitespace from the message.
+Parsing JSON data
+JSON is a common format for exchanging data between applications and APIs.
+import jsondata = '{"server": "server-01", "cpu": 85}'parsed_data = json.loads(data)print(parsed_data["server"])print(parsed_data["cpu"])
+
+
+
+Output:
+server-01
+85
+
+
+json.loads() converts a JSON-formatted string into Python data, usually a dictionary or list.
+9. Calling a Sample API
+An API (Application Programming Interface) allows one application to communicate with another application.
+For example, an operations script can call an API to retrieve service information, incident details, or monitoring data.
+Install the requests library
+Run this command in your terminal:
+python -m pip install requests
+
+
+Example: Call a sample API
+We'll use JSONPlaceholder, a public sample API.
+import requestsurl = "https://jsonplaceholder.typicode.com/posts/1"response = requests.get(url, timeout=10)print("Status code:", response.status_code)data = response.json()print("Title:", data["title"])
+
+
+
+The API returns sample post data in JSON format.
+Important concepts:
+Concept	Meaning
+requests.get()	Sends an HTTP GET request
+timeout=10	Limits how long the request waits
+status_code	Shows the HTTP response status
+response.json()	Parses the JSON response into Python data
+A status code of 200 usually means the HTTP request succeeded. Always check the response before relying on its data.
+10. Error Handling in Python
+Error handling prevents a script from crashing unexpectedly when a problem occurs.
+Python uses try, except, else, and finally to handle exceptions.
+Keyword	Purpose
+try	Contains code that may fail
+except	Handles an exception
+else	Runs if the try block succeeds
+finally	Runs whether an exception occurs or not
+Example: Handling a missing file
+try:    with open("operations.log", "r") as file:        print(file.read())except FileNotFoundError:    print("Error: Log file not found.")except OSError as error:    print("File operation failed:", error)
+
+
+
+This script handles a missing file or another operating-system file error instead of leaving the failure unhandled.
+Example: Handling API errors
+import requeststry:    response = requests.get(        "https://jsonplaceholder.typicode.com/posts/1",        timeout=10    )    response.raise_for_status()    data = response.json()    print("API call successful")    print(data["title"])except requests.exceptions.Timeout:    print("Error: API request timed out.")except requests.exceptions.HTTPError as error:    print("HTTP error:", error)except requests.exceptions.RequestException as error:    print("Network or request error:", error)except ValueError:    print("Error: Invalid JSON response.")
+
+
+
+raise_for_status() raises an HTTP error for unsuccessful HTTP status codes such as 404 or 500. The exception handlers then process the relevant failures.
+11. Guided Mini-Project: Log Analysis and API Check
+This combines file reading, data parsing, an API request, and error handling into one script.
+Create operations.log with the sample log entries from Section 7. Then run:
+import requests# Step 1: Read and analyze the log filetry:    error_count = 0    with open("operations.log", "r") as file:        for line in file:            if "ERROR" in line:                error_count += 1    print("Total errors:", error_count)except OSError as error:    print("Log file error:", error)# Step 2: Call a sample APItry:    url = "https://jsonplaceholder.typicode.com/posts/1"    response = requests.get(url, timeout=10)    response.raise_for_status()    data = response.json()    print("API status:", response.status_code)    print("API title:", data["title"])except requests.exceptions.RequestException as error:    print("API request failed:", error)except ValueError:    print("API returned invalid JSON.")
+
+
+
+What this script does
+1. Opens a log file and reads it line by line.
+2. Parses the log content by checking for the word ERROR.
+3. Counts the errors and prints the total.
+4. Calls a sample API and checks its HTTP status.
+5. Extracts the title from the JSON response.
+6. Handles file errors, network failures, HTTP errors, and invalid JSON.
+The API portion requires internet access. If the log file is missing, the script reports the file error and still attempts the API call.
+12. Basic Automation Workflow
+1. Collect data
+Read files, logs, system metrics or API responses
+
+2. Parse and process
+Extract values, count errors and compare thresholds
+
+3. Handle failures
+Catch exceptions, timeouts and invalid responses
+
+4. Report results
 Print status, generate reports or raise alerts
